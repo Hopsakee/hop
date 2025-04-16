@@ -14,4 +14,4 @@ jobs:
     steps:
       - uses: fastai/workflows/quarto-ghp@master
         with:
-          python-version: "3.11"
+          version: "3.11"
