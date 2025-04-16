@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-hop = "hop:main"
+hopsa = "hopsa:main"
 
 [build-system]
 requires = ["hatchling"]
