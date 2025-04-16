@@ -11,5 +11,8 @@ d = { 'settings': { 'branch': 'main',
                               'hop.nb_utils.pydantic_to_markdown_table': ('nb_utils.html#pydantic_to_markdown_table', 'hop/nb_utils.py')},
             'hop.nbs': { 'hop.nbs._escape_table_cell': ('nbs.html#_escape_table_cell', 'hop/nbs.py'),
                          'hop.nbs._format_type': ('nbs.html#_format_type', 'hop/nbs.py'),
+                         'hop.nbs.export_ipynb_toml': ('nbs.html#export_ipynb_toml', 'hop/nbs.py'),
+                         'hop.nbs.export_ipynb_yaml': ('nbs.html#export_ipynb_yaml', 'hop/nbs.py'),
+                         'hop.nbs.print_dict_structure': ('nbs.html#print_dict_structure', 'hop/nbs.py'),
                          'hop.nbs.pydantic_to_markdown_table': ('nbs.html#pydantic_to_markdown_table', 'hop/nbs.py')},
             'hop.ossys': {'hop.ossys.get_project_root': ('ossys.html#get_project_root', 'hop/ossys.py')}}}
