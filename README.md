@@ -54,13 +54,13 @@ Install latest from the GitHub
 [repository](https://github.com/Hopsakee/hop):
 
 ``` sh
-$ pip install git+https://github.com/Hopsakee/hop.git
+$ pip install git+https://github.com/Hopsakee/hopsa.git
 ```
 
 or with [uv](https://docs.astral.sh/uv/)
 
 ``` sh
-$ uv add git+https://github.com/Hopsakee/hop.git
+$ uv add git+https://github.com/Hopsakee/hopsa.git
 ```
 
 or from [pypi](https://pypi.org/project/hop/)
@@ -68,13 +68,13 @@ or from [pypi](https://pypi.org/project/hop/)
 With pip
 
 ``` sh
-$ pip install hop
+$ pip install hopsa
 ```
 
 or with [uv](https://docs.astral.sh/uv/)
 
 ``` sh
-$ uv add hop
+$ uv add hopsa
 ```
 
 ### Documentation
