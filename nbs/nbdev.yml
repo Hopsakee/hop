@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "hop"
+  site-url: "https://Hopsakee.github.io/hop"
+  description: "Utilities that I use frequently"
+  repo-branch: main
+  repo-url: "https://github.com/Hopsakee/hop"

@@ -1,12 +1,12 @@
 [project]
-name = "hop"
+name="hop"
 version = "0.1.0"
-description = "Add your description here"
+description = "Utilities that I use regularly"
 readme = "README.md"
 authors = [
     { name = "Hopsakee", email = "jdejong@posteo.nl" }
 ]
-requires-python = ">=3.11"
+requires-python=">=3.9"
 dependencies = [
     "pip>=25.0.1",
 ]
