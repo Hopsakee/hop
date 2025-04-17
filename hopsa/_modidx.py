@@ -6,10 +6,12 @@ d = { 'settings': { 'branch': 'main',
                 'git_url': 'https://github.com/Hopsakee/hopsa',
                 'lib_path': 'hopsa'},
   'syms': { 'hopsa.core': {'hopsa.core.foo': ('file_utils.html#foo', 'hopsa/core.py')},
+            'hopsa.lgtst': {'hopsa.lgtst.set_logging': ('lgtst.html#set_logging', 'hopsa/lgtst.py')},
             'hopsa.nbs': { 'hopsa.nbs._escape_table_cell': ('nbs.html#_escape_table_cell', 'hopsa/nbs.py'),
                            'hopsa.nbs._format_type': ('nbs.html#_format_type', 'hopsa/nbs.py'),
                            'hopsa.nbs.export_ipynb_toml': ('nbs.html#export_ipynb_toml', 'hopsa/nbs.py'),
                            'hopsa.nbs.export_ipynb_yaml': ('nbs.html#export_ipynb_yaml', 'hopsa/nbs.py'),
                            'hopsa.nbs.print_dict_structure': ('nbs.html#print_dict_structure', 'hopsa/nbs.py'),
                            'hopsa.nbs.pydantic_to_markdown_table': ('nbs.html#pydantic_to_markdown_table', 'hopsa/nbs.py')},
-            'hopsa.ossys': {'hopsa.ossys.get_project_root': ('ossys.html#get_project_root', 'hopsa/ossys.py')}}}
+            'hopsa.ossys': { 'hopsa.ossys.get_project_name': ('ossys.html#get_project_name', 'hopsa/ossys.py'),
+                             'hopsa.ossys.get_project_root': ('ossys.html#get_project_root', 'hopsa/ossys.py')}}}
