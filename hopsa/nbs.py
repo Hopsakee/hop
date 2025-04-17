@@ -8,6 +8,8 @@ __all__ = ['pydantic_to_markdown_table', 'print_dict_structure', 'export_ipynb_y
 # %% ../nbs/nbs.ipynb 3
 import inspect
 import nbformat
+import yaml
+from pathlib import Path
 from typing import Type, Any, Optional, Dict, get_type_hints, get_origin, get_args
 from pydantic import BaseModel, Field
 from IPython.display import display, Markdown
@@ -269,7 +271,7 @@ def export_ipynb_yaml(
     
     print(f"YAML file saved to: {output_path}")
 
-# %% ../nbs/nbs.ipynb 20
+# %% ../nbs/nbs.ipynb 22
 def export_ipynb_toml(
     nb_path: Optional[str] = None,
     output_path: Optional[str] = None
