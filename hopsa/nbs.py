@@ -7,6 +7,7 @@ __all__ = ['pydantic_to_markdown_table', 'print_dict_structure', 'export_ipynb_y
 
 # %% ../nbs/nbs.ipynb 3
 import inspect
+import nbformat
 from typing import Type, Any, Optional, Dict, get_type_hints, get_origin, get_args
 from pydantic import BaseModel, Field
 from IPython.display import display, Markdown
