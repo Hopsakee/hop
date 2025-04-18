@@ -8,6 +8,7 @@ __all__ = ['set_logging']
 # %% ../nbs/lgtst.ipynb 3
 import logging
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 from . import ossys
 
