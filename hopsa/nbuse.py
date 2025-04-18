@@ -6,9 +6,10 @@
 __all__ = ['pydantic_to_markdown_table', 'print_dict_structure', 'export_ipynb_toml']
 
 # %% ../nbs/nbuse.ipynb 3
+import ast
 import inspect
 import nbformat
-import yaml
+import tomli_w
 import tomllib
 from pathlib import Path
 from typing import Type, Any, Optional, Dict, get_type_hints, get_origin, get_args
@@ -178,130 +179,56 @@ def export_ipynb_toml(
     --------
     None
     """
-    # Get the path of the notebook that's currently being executed if not provided
     if nb_path is None:
-        try:
-            import IPython
-            ipython = IPython.get_ipython()
-            # Try different methods to get the notebook path
-            if hasattr(ipython, 'kernel') and hasattr(ipython.kernel, 'path'):
-                nb_path = ipython.kernel.path
-            elif hasattr(ipython, 'ev'):
-                # Try to get the path from the %notebook magic command history
-                for line in ipython.history_manager.get_tail(100, include_latest=True):
-                    if '%notebook' in line[2]:
-                        parts = line[2].split()
-                        for i, part in enumerate(parts):
-                            if part == '%notebook' and i+1 < len(parts):
-                                nb_path = parts[i+1]
-                                break
-        except (ImportError, AttributeError):
-            pass
-        
-        if nb_path is None:
-            raise ValueError(
-                "Could not determine the notebook path automatically. "
-                "Please provide the notebook_path parameter explicitly."
-            )
+        raise ValueError(
+            "Please provide the notebook_path parameter explicitly."
+        )
     
-    # Read the notebook
     with open(nb_path, 'r', encoding='utf-8') as f:
         notebook = nbformat.read(f, as_version=4)
-    
-    # Initialize variables
-    toml_data = {}
-    current_group = None
-    
-    # Process cells
-    for cell in notebook.cells:
-        # Process markdown cells to find level 2 headings
-        if cell.cell_type == 'markdown':
-            lines = cell.source.split('\n')
-            for line in lines:
-                if line.startswith('## '):
-                    # Found a level 2 heading, use it as a group
-                    current_group = line[3:].strip()
-                    current_group = current_group.replace(' ', '_')
-                    toml_data[current_group] = {}
-        
-        # Process code cells if we have a current group
-        elif cell.cell_type == 'code' and current_group is not None:
-            # Process each line in the code cell looking for parameter assignments
-            code_lines = cell.source.split('\n')
-            for line in code_lines:
-                # Skip empty lines and comments
-                line = line.strip()
-                if not line or line.startswith('#'):
-                    continue
-                
-                # Look for parameter assignments (var = value)
-                if '=' in line:
-                    # Skip lines that call export functions
-                    if 'export_ipynb_' in line:
-                        continue
-                        
-                    parts = line.split('=', 1)
-                    if len(parts) == 2:
-                        key = parts[0].strip()
-                        value_str = parts[1].strip()
-                        
-                        # Try to evaluate the value to get proper types
-                        try:
-                            # Handle string values that might be quoted
-                            if (value_str.startswith('"') and value_str.endswith('"')) or \
-                               (value_str.startswith("'") and value_str.endswith("'")):
-                                value = value_str[1:-1]  # Remove quotes
-                            else:
-                                # Try to evaluate as Python literal
-                                import ast
-                                value = ast.literal_eval(value_str)
-                        except (SyntaxError, ValueError):
-                            # If evaluation fails, use the string as is
-                            value = value_str
-                        
-                        # Add to TOML data
-                        toml_data[current_group][key] = value
-    
-    # Determine output path if not provided
+
     if output_path is None:
         notebook_path = Path(nb_path)
         output_path = notebook_path.with_suffix('.toml')
-
-    # Write the TOML file manually to ensure proper formatting
-    with open(output_path, 'w', encoding='utf-8') as f:
-        for section, values in toml_data.items():
-            f.write(f"[{section}]\n")
-            for key, value in values.items():
-                # For headers_to_split_on, we need to preserve the tuple structure
-                if key == "headers_to_split_on" and isinstance(value, list) and all(isinstance(item, tuple) for item in value):
-                    # Write as a TOML array of arrays
-                    f.write(f"{key} = [\n")
-                    for tup in value:
-                        # Each tuple becomes an array in TOML
-                        elements = []
-                        for elem in tup:
-                            if isinstance(elem, str):
-                                elements.append(f'"{elem}"')
-                            else:
-                                elements.append(str(elem))
-                        f.write(f"  [{', '.join(elements)}],\n")
-                    f.write("]\n")
-                else:
-                    # For other values, use the standard TOML serialization
-                    # Convert Python value to TOML-compatible string
-                    if isinstance(value, str):
-                        f.write(f'{key} = "{value}"\n')
-                    elif isinstance(value, list):
-                        # Format list elements properly
-                        formatted_list = []
-                        for item in value:
-                            if isinstance(item, str):
-                                formatted_list.append(f'"{item}"')
-                            else:
-                                formatted_list.append(str(item))
-                        f.write(f"{key} = [{', '.join(formatted_list)}]\n")
-                    else:
-                        f.write(f"{key} = {value}\n")
-            f.write("\n")
-
+    
+    data = {}
+    current_group = None
+    
+    for cell in notebook.cells:
+        if cell.cell_type == 'markdown':
+            for line in cell.source.split('\n'):
+                if line.startswith('## '):
+                    current_group = line[3:].strip().replace(' ', '_')
+        
+        elif cell.cell_type == 'code' and current_group is not None:
+            try:
+                tree = ast.parse(cell.source)
+            except SyntaxError:
+                # Skip malformed code cells
+                print(f"skipped: {cell.source}")
+                continue
+            
+            if current_group not in data:
+                data[current_group] = {}
+            
+            for node in tree.body:
+                if isinstance(node, ast.Assign):
+                    for target in node.targets:
+                        if isinstance(target, ast.Name):
+                            key = target.id
+                            if key.startswith('export_ipynb_'):
+                                continue
+                            value = globals().get(key, None)
+                            if value is None:
+                                try:
+                                    value = ast.literal_eval(node.value)
+                                except (ValueError, SyntaxError):
+                                    print(f"Warning: Could not evaluate value for '{key}' in group '{current_group}'")
+                                    continue
+                            data[current_group][key] = value
+            
+    with open(output_path, 'wb') as f:
+        # 'wb', because 
+        tomli_w.dump(data, f)
+    
     print(f"TOML file saved to: {output_path}")

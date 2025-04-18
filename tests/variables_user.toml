@@ -1,8 +1,35 @@
-[File_locations]
+[Create_markdown_table_from_a_Pydantic_dataclass]
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."The Big Lebowski".characters]
+Dude = "White Russian"
+Walter = "Vietnam"
+Donny = "Bowling"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."The Big Lebowski".setting]
+location = "Bowling Alley"
+object = "Rug"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."Office Space".characters]
+Peter = "TPS report"
+Milton = "Red stapler"
+Lumbergh = "Memos"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."Office Space".setting]
+company = "Initech"
+object = "Printer"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."The Princess Bride".characters]
+Westley = "Farm Boy"
+Inigo = "Revenge"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict."The Princess Bride".setting]
+location = "Cliffs of Insanity"
+
+[Create_a_tree_structure_from_a_Python_dictionary.movie_dict.Labyrinth.characters]
+Sarah = "Labyrinth"
+Jareth = "Goblin King"
+
+[Export_notebook_variables_to_toml]
 somewhere = "/home/jared/lost"
-herehere = "/home/goblinking.md"
 
-[Scales]
-larger = 100
-smaller = -10.5
-
+[Default_nbdev_code_cells]

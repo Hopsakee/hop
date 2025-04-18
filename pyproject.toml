@@ -1,6 +1,6 @@
 [project]
 name="hopsa"
-version = "0.2.3"
+version = "0.2.4"
 description = "Utilities that I use regularly"
 readme = "README.md"
 authors = [
@@ -12,6 +12,7 @@ dependencies = [
     "nbformat>=5.10.4",
     "pip>=25.0.1",
     "pydantic>=2.11.3",
+    "tomli-w>=1.2.0",
 ]
 
 [project.scripts]
