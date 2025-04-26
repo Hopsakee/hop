@@ -215,6 +215,7 @@ def export_ipynb_toml(
                 if isinstance(node, ast.Assign):
                     for target in node.targets:
                         if isinstance(target, ast.Name):
+                            # TODO: for some reason this doesn't work if there's a variable in the variable, like so: `v = f"{x}eny"`
                             key = target.id
                             if key.startswith('export_ipynb_'):
                                 continue
