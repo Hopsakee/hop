@@ -1,0 +1,162 @@
+[
+  {
+    "objectID": "lgtst.html",
+    "href": "lgtst.html",
+    "title": "Logging and tests utilities",
+    "section": "",
+    "text": "Python logging has five standard levels, in increasing order of severity:\n\nDEBUG (10): Detailed information, typically useful for diagnosing problems\nINFO (20): Confirmation that things are working as expected\nWARNING (30): An indication something unexpected happened, but the program still works\nERROR (40): Due to a more serious problem, the software couldn’t perform some function\nCRITICAL (50): A very serious error, indicating the program may be unable to continue\n\nThe function does return the root Logger, though typically you would not use it directly.\n\n\n\n\n\n set_logging (level:int=20, format_file:str='%(asctime)s - %(name)s -\n              %(levelname)s - %(message)s',\n              format_console:str='%(levelname)s - %(message)s',\n              datefmt:str='%Y-%m-%d %H:%M:%S', log_dir:str=None,\n              filemode:str='a', backupCount:int=5, maxBytes:int=5242880)\n\nSet up the root Logger\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nlevel\nint\n20\nThe logging level\n\n\nformat_file\nstr\n%(asctime)s - %(name)s - %(levelname)s - %(message)s\nThe logging format for the file\n\n\nformat_console\nstr\n%(levelname)s - %(message)s\nThe logging format for the console\n\n\ndatefmt\nstr\n%Y-%m-%d %H:%M:%S\nThe date format\n\n\nlog_dir\nstr\nNone\nThe logging directory, if None, logs to console\n\n\nfilemode\nstr\na\nThe logging file mode. ‘a’ for append, ‘w’ for overwrite\n\n\nbackupCount\nint\n5\nThe number of backup files to keep\n\n\nmaxBytes\nint\n5242880\nThe maximum size of the log file in bytes\n\n\nReturns\nLogger\n\n\n\n\n\n\n\nWe must make sure the logging works when we are testing indivudual notebooks and when running the complete code. To accomplish this we can do the following.\n\nFirst in run.py or other entry point of the project, add the following to get the logging when the complete code is run:\n\n\nfrom hopsa import set_logging\n\nif __name__ == \"__main__\":\n   log_dir = \"../logs\"\n   set_logging(log_dir=log_dir, level=10)\n\nor\n\nimport logging\nfrom hopsa import set_logging\n\nif __name__ == \"__main__\":\n   log_dir = \"../logs\"\n   set_logging(log_dir=log_dir, level=logging.DEBUG)\n\n\nThen in each module/notebook, you create module-specific loggers:\n\nAt the top of each notebook (00_core.ipynb, 02_features.ipynb, etc.)\n\n#| export\nimport logging\n\n\n#| eval: false\nfrom hopsa import lgtst\n\n\n#| eval: false\nlgtst.set_logging(log_dir=\"../logs\", level=logging.DEBUG)\n\n\n#| export\nlogger = logging.getLogger(__name__)\n\nThe #| export nbdev directive makes sure this cell will be used in the python module. The #| eval: false nbdev directive makes sure this cell will run when we run the notebook, but it won’t be used in the Python module and it also won’t be tested when we run nbdev_prepare.\nThen use the logger throughout the module\n\nlogger.debug(\"Debug message\")\nlogger.info(\"Info message\")\n\n\nrt_logger = set_logging()\n\nINFO - Log file: /home/jelle/code/hopsa/logs/hopsa.log\nINFO - Log file: /home/jelle/code/hopsa/logs/hopsa.log\nINFO - Log file mode: a\nINFO - Log file mode: a\nINFO - Log backup count: 5\nINFO - Log backup count: 5\nINFO - Log max bytes: 5242880\nINFO - Log max bytes: 5242880\n\n\n\nfor h in rt_logger.handlers:\n    h.close()\n    rt_logger.removeHandler(h)\n    print(f\"Removed handler: {h}\")\n\nRemoved handler: &lt;StreamHandler stderr (INFO)&gt;\nRemoved handler: &lt;RotatingFileHandler /home/jelle/code/hopsa/logs/hopsa.log (INFO)&gt;",
+    "crumbs": [
+      "Logging and tests utilities"
+    ]
+  },
+  {
+    "objectID": "lgtst.html#logging",
+    "href": "lgtst.html#logging",
+    "title": "Logging and tests utilities",
+    "section": "",
+    "text": "Python logging has five standard levels, in increasing order of severity:\n\nDEBUG (10): Detailed information, typically useful for diagnosing problems\nINFO (20): Confirmation that things are working as expected\nWARNING (30): An indication something unexpected happened, but the program still works\nERROR (40): Due to a more serious problem, the software couldn’t perform some function\nCRITICAL (50): A very serious error, indicating the program may be unable to continue\n\nThe function does return the root Logger, though typically you would not use it directly.\n\n\n\n\n\n set_logging (level:int=20, format_file:str='%(asctime)s - %(name)s -\n              %(levelname)s - %(message)s',\n              format_console:str='%(levelname)s - %(message)s',\n              datefmt:str='%Y-%m-%d %H:%M:%S', log_dir:str=None,\n              filemode:str='a', backupCount:int=5, maxBytes:int=5242880)\n\nSet up the root Logger\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nlevel\nint\n20\nThe logging level\n\n\nformat_file\nstr\n%(asctime)s - %(name)s - %(levelname)s - %(message)s\nThe logging format for the file\n\n\nformat_console\nstr\n%(levelname)s - %(message)s\nThe logging format for the console\n\n\ndatefmt\nstr\n%Y-%m-%d %H:%M:%S\nThe date format\n\n\nlog_dir\nstr\nNone\nThe logging directory, if None, logs to console\n\n\nfilemode\nstr\na\nThe logging file mode. ‘a’ for append, ‘w’ for overwrite\n\n\nbackupCount\nint\n5\nThe number of backup files to keep\n\n\nmaxBytes\nint\n5242880\nThe maximum size of the log file in bytes\n\n\nReturns\nLogger\n\n\n\n\n\n\n\nWe must make sure the logging works when we are testing indivudual notebooks and when running the complete code. To accomplish this we can do the following.\n\nFirst in run.py or other entry point of the project, add the following to get the logging when the complete code is run:\n\n\nfrom hopsa import set_logging\n\nif __name__ == \"__main__\":\n   log_dir = \"../logs\"\n   set_logging(log_dir=log_dir, level=10)\n\nor\n\nimport logging\nfrom hopsa import set_logging\n\nif __name__ == \"__main__\":\n   log_dir = \"../logs\"\n   set_logging(log_dir=log_dir, level=logging.DEBUG)\n\n\nThen in each module/notebook, you create module-specific loggers:\n\nAt the top of each notebook (00_core.ipynb, 02_features.ipynb, etc.)\n\n#| export\nimport logging\n\n\n#| eval: false\nfrom hopsa import lgtst\n\n\n#| eval: false\nlgtst.set_logging(log_dir=\"../logs\", level=logging.DEBUG)\n\n\n#| export\nlogger = logging.getLogger(__name__)\n\nThe #| export nbdev directive makes sure this cell will be used in the python module. The #| eval: false nbdev directive makes sure this cell will run when we run the notebook, but it won’t be used in the Python module and it also won’t be tested when we run nbdev_prepare.\nThen use the logger throughout the module\n\nlogger.debug(\"Debug message\")\nlogger.info(\"Info message\")\n\n\nrt_logger = set_logging()\n\nINFO - Log file: /home/jelle/code/hopsa/logs/hopsa.log\nINFO - Log file: /home/jelle/code/hopsa/logs/hopsa.log\nINFO - Log file mode: a\nINFO - Log file mode: a\nINFO - Log backup count: 5\nINFO - Log backup count: 5\nINFO - Log max bytes: 5242880\nINFO - Log max bytes: 5242880\n\n\n\nfor h in rt_logger.handlers:\n    h.close()\n    rt_logger.removeHandler(h)\n    print(f\"Removed handler: {h}\")\n\nRemoved handler: &lt;StreamHandler stderr (INFO)&gt;\nRemoved handler: &lt;RotatingFileHandler /home/jelle/code/hopsa/logs/hopsa.log (INFO)&gt;",
+    "crumbs": [
+      "Logging and tests utilities"
+    ]
+  },
+  {
+    "objectID": "ossys.html",
+    "href": "ossys.html",
+    "title": "System utilities",
+    "section": "",
+    "text": "get_project_root ()\n\nGet the project root directory from either notebook or module context\n\n\n\nget_project_root()\n\nPath('/home/jelle/code/hopsa')",
+    "crumbs": [
+      "System utilities"
+    ]
+  },
+  {
+    "objectID": "ossys.html#get-project-root",
+    "href": "ossys.html#get-project-root",
+    "title": "System utilities",
+    "section": "",
+    "text": "get_project_root ()\n\nGet the project root directory from either notebook or module context\n\n\n\nget_project_root()\n\nPath('/home/jelle/code/hopsa')",
+    "crumbs": [
+      "System utilities"
+    ]
+  },
+  {
+    "objectID": "ossys.html#get-project-name",
+    "href": "ossys.html#get-project-name",
+    "title": "System utilities",
+    "section": "Get project name",
+    "text": "Get project name\n\n\nget_project_name\n\n get_project_name ()\n\n\nExample usage\n\nget_project_name()\n\n'hopsa'",
+    "crumbs": [
+      "System utilities"
+    ]
+  },
+  {
+    "objectID": "ossys.html#sanitize-names",
+    "href": "ossys.html#sanitize-names",
+    "title": "System utilities",
+    "section": "Sanitize names",
+    "text": "Sanitize names\nRemove special characters from names, convert to lowercase, and remove leading and trailing whitespace. Especially convenient to create filenames and foldernames that are compatible with most operating systems, but can also be used to sanitize names for other purposes.\n\n\nsanitize_name\n\n sanitize_name (name:str)\n\nRemove special characters from names, convert to lowercase, and remove leading and trailing whitespace.\n\n\"\"\"Test basic sanitization cases\"\"\"\ntest_eq(sanitize_name(\"My Test Name\"), \"my_test_name\")\ntest_eq(sanitize_name(\"  Trim Me  \"), \"trim_me\")\ntest_eq(sanitize_name(\"UPPER CASE\"), \"upper_case\")\n\n\"\"\"Test with special characters\"\"\"\ntest_eq(sanitize_name(\"File@Name#123\"), \"file_name_123\")\ntest_eq(sanitize_name(\"user@domain.com\"), \"user_domain_com\")\ntest_eq(sanitize_name(\"test$%^&*()name\"), \"test_name\")\n\n\"\"\"Test with emoticons and unicode characters\"\"\"\ntest_eq(sanitize_name(\"Happy 😊 Face\"), \"happy_face\")\ntest_eq(sanitize_name(\"Thumbs 👍 Up\"), \"thumbs_up\")\ntest_eq(sanitize_name(\"Café \"), \"cafe\")\ntest_eq(sanitize_name(\"Mötörhead\"), \"motorhead\")\n\n\"\"\"Test with multiple spaces and various whitespace characters\"\"\"\ntest_eq(sanitize_name(\"Too    Many   Spaces\"), \"too_many_spaces\")\ntest_eq(sanitize_name(\"New\\nLine\"), \"new_line\")\ntest_eq(sanitize_name(\"Tab\\tSeparated\"), \"tab_separated\")\n\n\"\"\"Test edge cases and empty inputs\"\"\"\ntest_eq(sanitize_name(\"\"), \"\")\ntest_eq(sanitize_name(\" \"), \"\")\ntest_eq(sanitize_name(\"!@#$%^\"), \"\")\ntest_eq(sanitize_name(\"123\"), \"123\")\ntest_eq(sanitize_name(\"a\"), \"a\")",
+    "crumbs": [
+      "System utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html",
+    "href": "nbuse.html",
+    "title": "Notebook utilities",
+    "section": "",
+    "text": "Especially confenient for Documentation written automatically from the Notebooks by nbdev.\n\n\n\n\n pydantic_to_markdown_table (model_class:Type[pydantic.main.BaseModel])\n\n*Convert a Pydantic model class to a markdown table and display it in Jupyter notebook.\nArgs: model_class: A Pydantic model class (subclass of BaseModel)*\n\n\n\nclass DummyChild(BaseModel):\n    \"\"\"A simple dataclass model\"\"\"\n    model_name: str = Field(..., description=\"Name or path of the model to use\") # Name\n    provider: str = Field(default=\"huggingface\", description=\"Model provider (huggingface, openai, etc)\")\n    api_key_env_var: Optional[str] = Field(default=None, description=\"Environment variable name for API key\")\n    api_base_url: Optional[str] = Field(default=None, description=\"Base URL for API reqeuest\")\n    temperature: float = Field(default=0.7, description=\"Temperature for generation\")\n\nclass DummyParent(BaseModel):\n    \"\"\"Main configuration for a chat application\"\"\"\n    app_name: str = Field(..., description=\"Name of the application\")\n    description: str = Field(default=\"\", description=\"Description of the application\")\n    system_prompt: str = Field(..., description=\"System prompt for the LLM\")\n    model: DummyChild\n    show_system_prompt: bool = Field(default=True, description=\"Whether to show system prompt in UI\")\n    show_context: bool = Field(default=True, description=\"Whether to show context in UI\")\n\n\npydantic_to_markdown_table(DummyParent)\n\n\nMain configuration for a chat application\n\n\n\n\n\n\n\n\n\nVariable\nType\nDefault\nDetails\n\n\n\n\napp_name\nstr\nPydanticUndefined\nName of the application\n\n\ndescription\nstr\n’’\nDescription of the application\n\n\nsystem_prompt\nstr\nPydanticUndefined\nSystem prompt for the LLM\n\n\nmodel\nDummyChild\nPydanticUndefined\n(see DummyChild table)\n\n\nshow_system_prompt\nbool\nTrue\nWhether to show system prompt in UI\n\n\nshow_context\nbool\nTrue\nWhether to show context in UI",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html#create-markdown-table-from-a-pydantic-dataclass",
+    "href": "nbuse.html#create-markdown-table-from-a-pydantic-dataclass",
+    "title": "Notebook utilities",
+    "section": "",
+    "text": "Especially confenient for Documentation written automatically from the Notebooks by nbdev.\n\n\n\n\n pydantic_to_markdown_table (model_class:Type[pydantic.main.BaseModel])\n\n*Convert a Pydantic model class to a markdown table and display it in Jupyter notebook.\nArgs: model_class: A Pydantic model class (subclass of BaseModel)*\n\n\n\nclass DummyChild(BaseModel):\n    \"\"\"A simple dataclass model\"\"\"\n    model_name: str = Field(..., description=\"Name or path of the model to use\") # Name\n    provider: str = Field(default=\"huggingface\", description=\"Model provider (huggingface, openai, etc)\")\n    api_key_env_var: Optional[str] = Field(default=None, description=\"Environment variable name for API key\")\n    api_base_url: Optional[str] = Field(default=None, description=\"Base URL for API reqeuest\")\n    temperature: float = Field(default=0.7, description=\"Temperature for generation\")\n\nclass DummyParent(BaseModel):\n    \"\"\"Main configuration for a chat application\"\"\"\n    app_name: str = Field(..., description=\"Name of the application\")\n    description: str = Field(default=\"\", description=\"Description of the application\")\n    system_prompt: str = Field(..., description=\"System prompt for the LLM\")\n    model: DummyChild\n    show_system_prompt: bool = Field(default=True, description=\"Whether to show system prompt in UI\")\n    show_context: bool = Field(default=True, description=\"Whether to show context in UI\")\n\n\npydantic_to_markdown_table(DummyParent)\n\n\nMain configuration for a chat application\n\n\n\n\n\n\n\n\n\nVariable\nType\nDefault\nDetails\n\n\n\n\napp_name\nstr\nPydanticUndefined\nName of the application\n\n\ndescription\nstr\n’’\nDescription of the application\n\n\nsystem_prompt\nstr\nPydanticUndefined\nSystem prompt for the LLM\n\n\nmodel\nDummyChild\nPydanticUndefined\n(see DummyChild table)\n\n\nshow_system_prompt\nbool\nTrue\nWhether to show system prompt in UI\n\n\nshow_context\nbool\nTrue\nWhether to show context in UI",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html#dummyparent",
+    "href": "nbuse.html#dummyparent",
+    "title": "Notebook utilities",
+    "section": "",
+    "text": "Main configuration for a chat application\n\n\n\n\n\n\n\n\n\nVariable\nType\nDefault\nDetails\n\n\n\n\napp_name\nstr\nPydanticUndefined\nName of the application\n\n\ndescription\nstr\n’’\nDescription of the application\n\n\nsystem_prompt\nstr\nPydanticUndefined\nSystem prompt for the LLM\n\n\nmodel\nDummyChild\nPydanticUndefined\n(see DummyChild table)\n\n\nshow_system_prompt\nbool\nTrue\nWhether to show system prompt in UI\n\n\nshow_context\nbool\nTrue\nWhether to show context in UI",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html#create-a-tree-structure-from-a-python-dictionary",
+    "href": "nbuse.html#create-a-tree-structure-from-a-python-dictionary",
+    "title": "Notebook utilities",
+    "section": "Create a tree structure from a Python dictionary",
+    "text": "Create a tree structure from a Python dictionary\nFunction to clearly display the structure of a Python dictionary. The output only shows the keys.\n\n\nprint_dict_structure\n\n print_dict_structure (d:Dict, indent=0)\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nd\nDict\n\nThe dictionary that will be pretty printed\n\n\nindent\nint\n0\nThe indent that is used for subkeys\n\n\nReturns\nstr\n\n\n\n\n\n\nExample usage\n\nmovie_dict = {\n    \"The Big Lebowski\": {\n        \"characters\": {\n            \"Dude\": \"White Russian\",\n            \"Walter\": \"Vietnam\",\n            \"Donny\": \"Bowling\"\n        },\n        \"setting\": {\n            \"location\": \"Bowling Alley\",\n            \"object\": \"Rug\"\n        }\n    },\n    \"Office Space\": {\n        \"characters\": {\n            \"Peter\": \"TPS report\",\n            \"Milton\": \"Red stapler\",\n            \"Lumbergh\": \"Memos\"\n        },\n        \"setting\": {\n            \"company\": \"Initech\",\n            \"object\": \"Printer\"\n        }\n    },\n    \"The Princess Bride\": {\n        \"characters\": {\n            \"Westley\": \"Farm Boy\",\n            \"Inigo\": \"Revenge\"\n        },\n        \"setting\": {\n            \"location\": \"Cliffs of Insanity\"\n        }\n    },\n    \"Labyrinth\": {\n        \"characters\": {\n            \"Sarah\": \"Labyrinth\",\n            \"Jareth\": \"Goblin King\"\n        }\n    }\n}\n\nprint_dict_structure(movie_dict)\n\n├── The Big Lebowski\n  ├── characters\n    ├── Dude\n    ├── Walter\n    ├── Donny\n  ├── setting\n    ├── location\n    ├── object\n├── Office Space\n  ├── characters\n    ├── Peter\n    ├── Milton\n    ├── Lumbergh\n  ├── setting\n    ├── company\n    ├── object\n├── The Princess Bride\n  ├── characters\n    ├── Westley\n    ├── Inigo\n  ├── setting\n    ├── location\n├── Labyrinth\n  ├── characters\n    ├── Sarah\n    ├── Jareth",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html#export-notebook-variables-to-toml",
+    "href": "nbuse.html#export-notebook-variables-to-toml",
+    "title": "Notebook utilities",
+    "section": "Export notebook variables to toml",
+    "text": "Export notebook variables to toml\nA function to create a TOML file from the contents of a Jupyter Notebook. This helps to create a simple interface to set the parameters of the application, without the need to build a complete GUI or demand of the user to edit TOML files directly without the ease and explanations possible in a Jupyter Notebook.\nTOML can’t handle None values. So if you want to set a value to None, just don’t add that variable to the Jupyter Notebook or comment it out.\nThe function will replace any spaces in a heading with underscores.\n/opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/fastcore/docscrape.py:230: UserWarning: Unknown section Parameters:\n  else: warn(msg)\n/opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/fastcore/docscrape.py:230: UserWarning: Unknown section Returns:\n  else: warn(msg)\n\n\nexport_ipynb_toml\n\n export_ipynb_toml (nb_path:Optional[str]=None,\n                    output_path:Optional[str]=None)\n\n*Export the content of the current Jupyter notebook to a TOML file.\nThis function reads the content of the notebook where it’s being executed, extracts all level 2 (##) markdown cells as groups, and all parameter assignments in code cells as key-value pairs within those groups. Regular text markdown cells are ignored.*\n\nUsage of globals() and ast\nThe ast (Abstract Syntax Tree) module in Python allows you to parse Python source code into its syntax tree representation. This lets you analyze and manipulate Python code programmatically.\nast.parse(source): Parses Python code (as a string) into an AST tree.\nglobals() is a built-in function that returns the current global symbol table as a dictionary.\nWhy use globals() first?\nDynamic or computed variables: In Jupyter notebooks, variables can be set by code that isn’t just a literal assignment. For example:\na = 1 + 2\nb = some_function()\nc = [i for i in range(5)]\n\nglobals()[‘a’] will give 3.\nglobals()[‘b’] will give the result of some_function().\nglobals()[‘c’] will give the actual list [0, 1, 2, 3, 4].\n\nast.literal_eval limitations:\n\nast.literal_eval can only evaluate simple literals (strings, numbers, lists, dicts, etc.), not arbitrary Python expressions or anything involving variables/functions.\nFor example, it fails on a = 1 + 2, b = some_function(), or c = [i for i in range(5)].\n\nNotebook context:\n\nIn a notebook, users often assign variables dynamically, not just with literals.\nUsing globals() ensures you get the actual value as it exists in the current kernel session, reflecting any computation or function calls.\n\nWhy fall back to ast.literal_eval?\nFor simple assignments: - If the variable isn’t found in globals() (maybe the cell wasn’t run, or the variable was deleted), you can try to parse the value directly from the code if it’s a literal. - This works for things like x = 42 or y = “hello”, but not for expressions or function calls.\nSummary\n\nglobals(): Gets the current, actual value in the notebook, including results of computations.\nast.literal_eval: Only works for simple literals, but is a safe fallback if the variable isn’t in globals().\n\n\n\nWrite TOML files using binary\nWe write using binary, because tomli-w is designed to work the same way as the built-in tomllib, which only reads from binary streams.\nThis ensures consistent encoding (UTF-8) and avoids issues with text encodings across platforms.\n\n\nExample usage\n\nsomewhere = \"/home/jared/lost\"\n\n\nexport_ipynb_toml(\"nbuse.ipynb\", \"../tests/variables_user.toml\")\n\nTOML file saved to: ../tests/variables_user.toml\n\n\nthen read the TOML file using the tomllib module by doing:\n\nwith open(\"../tests/variables_user.toml\", \"rb\") as tml:\n    usr_toml = tomllib.load(tml)\n\nprint_dict_structure(usr_toml)\n\n├── Create_markdown_table_from_a_Pydantic_dataclass\n├── Create_a_tree_structure_from_a_Python_dictionary\n  ├── movie_dict\n    ├── The Big Lebowski\n      ├── characters\n        ├── Dude\n        ├── Walter\n        ├── Donny\n      ├── setting\n        ├── location\n        ├── object\n    ├── Office Space\n      ├── characters\n        ├── Peter\n        ├── Milton\n        ├── Lumbergh\n      ├── setting\n        ├── company\n        ├── object\n    ├── The Princess Bride\n      ├── characters\n        ├── Westley\n        ├── Inigo\n      ├── setting\n        ├── location\n    ├── Labyrinth\n      ├── characters\n        ├── Sarah\n        ├── Jareth\n├── Export_notebook_variables_to_toml\n  ├── somewhere\n├── Default_nbdev_code_cells",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "nbuse.html#default-nbdev-code-cells",
+    "href": "nbuse.html#default-nbdev-code-cells",
+    "title": "Notebook utilities",
+    "section": "Default nbdev code cells",
+    "text": "Default nbdev code cells",
+    "crumbs": [
+      "Notebook utilities"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "hopsa",
+    "section": "",
+    "text": "If you are new to using nbdev here are some useful pointers to get you started.",
+    "crumbs": [
+      "hopsa"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "hopsa",
+    "section": "",
+    "text": "If you are new to using nbdev here are some useful pointers to get you started.",
+    "crumbs": [
+      "hopsa"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "hopsa",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/Hopsakee/hopsa.git\nor with uv\n$ uv add git+https://github.com/Hopsakee/hopsa.git\nor from pypi\nWith pip\n$ pip install hopsa\nor with uv\n$ uv add hopsa\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "hopsa"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "hopsa",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "hopsa"
+    ]
+  }
+]
