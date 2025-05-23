@@ -13,4 +13,5 @@ d = { 'settings': { 'branch': 'main',
                              'hopsa.nbuse.print_dict_structure': ('nbuse.html#print_dict_structure', 'hopsa/nbuse.py'),
                              'hopsa.nbuse.pydantic_to_markdown_table': ('nbuse.html#pydantic_to_markdown_table', 'hopsa/nbuse.py')},
             'hopsa.ossys': { 'hopsa.ossys.get_project_name': ('ossys.html#get_project_name', 'hopsa/ossys.py'),
-                             'hopsa.ossys.get_project_root': ('ossys.html#get_project_root', 'hopsa/ossys.py')}}}
+                             'hopsa.ossys.get_project_root': ('ossys.html#get_project_root', 'hopsa/ossys.py'),
+                             'hopsa.ossys.sanitize_name': ('ossys.html#sanitize_name', 'hopsa/ossys.py')}}}
